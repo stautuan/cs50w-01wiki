@@ -1,7 +1,7 @@
 import re
 import markdown2
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from . import util
 
@@ -36,3 +36,9 @@ def page(request, topic):
         "content": content
 
     })
+
+
+def search(request):
+    query = request.GET.get("q")
+
+    return redirect("page", topic=query)
