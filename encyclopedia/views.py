@@ -2,6 +2,7 @@ import re
 import markdown2
 
 from django.shortcuts import render, redirect
+from .models import Entry
 
 from . import util
 
@@ -34,11 +35,30 @@ def page(request, topic):
         "page": util.get_entry(topic),
         "title": title,
         "content": content
-
     })
 
 
 def search(request):
-    query = request.GET.get("q")
+    query = request.GET.get('q').lower()
+    entries = util.list_entries()
 
-    return redirect("page", topic=query)
+    # Find the exact match of the query
+    lower_entries = []
+
+    for entry in entries:
+        lower_entries.append(entry.lower())
+
+    if query in lower_entries:
+        return redirect("page", topic=query)
+
+    # Find entries containing the query as a substring
+    matching_entries = []
+
+    for entry in entries:
+        if query in entry.lower():
+            matching_entries.append(entry)
+
+    return render(request, "encyclopedia/search_results.html", {
+        "query": query,
+        "entries": matching_entries
+    })
