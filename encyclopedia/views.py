@@ -2,9 +2,16 @@ import re
 import markdown2
 
 from django.shortcuts import render, redirect
-from .models import Entry
+from django import forms
 
 from . import util
+
+
+class NewPage(forms.Form):
+    title = forms.CharField(widget=forms.TextInput(
+        attrs={'style': "display:flex; margin-bottom: 20px"}))
+    content = forms.CharField(
+        widget=forms.Textarea(attrs={'style': "vertical-align: top; display:flex; margin-bottom: 20px"}))
 
 
 def index(request):
@@ -49,7 +56,7 @@ def search(request):
         lower_entries.append(entry.lower())
 
     if query in lower_entries:
-        return redirect("page", topic=query)
+        return redirect("encyclopedia:page", topic=query)
 
     # Find entries containing the query as a substring
     matching_entries = []
@@ -61,4 +68,10 @@ def search(request):
     return render(request, "encyclopedia/search_results.html", {
         "query": query,
         "entries": matching_entries
+    })
+
+
+def new(request):
+    return render(request, "encyclopedia/new_page.html", {
+        "form": NewPage()
     })
