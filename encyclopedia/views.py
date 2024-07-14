@@ -7,11 +7,11 @@ from django import forms
 from . import util
 
 
-class NewPage(forms.Form):
+class NewPageForm(forms.Form):
     title = forms.CharField(widget=forms.TextInput(
-        attrs={'style': "display:flex; margin-bottom: 20px"}))
+        attrs={'style': "display:flex"}))
     content = forms.CharField(
-        widget=forms.Textarea(attrs={'style': "vertical-align: top; display:flex; margin-bottom: 20px"}))
+        widget=forms.Textarea(attrs={'style': "vertical-align: top; display:flex; height: 300px; width: 500px"}))
 
 
 def index(request):
@@ -72,6 +72,29 @@ def search(request):
 
 
 def new(request):
+    # Handles when the user submits the form
+    if request.method == "POST":
+        form = NewPageForm(request.POST)
+
+        if form.is_valid():
+            title = form.cleaned_data["title"]
+            content = form.cleaned_data["content"]
+
+            # Check if entry already exists
+            if util.get_entry(title):
+                return render(request, "encyclopedia/new_page.html", {
+                    "form": form,
+                    "error": "This title already exists."
+                })
+
+            # Save the entry if it doesn't exist
+            util.save_entry(title, content)
+            return redirect("encyclopedia:page", topic=title)
+
+    # Handles when the user visits the page
+    else:
+        form = NewPageForm()
+
     return render(request, "encyclopedia/new_page.html", {
-        "form": NewPage()
+        "form": form
     })
