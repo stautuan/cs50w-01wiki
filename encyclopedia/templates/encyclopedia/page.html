@@ -3,9 +3,7 @@
 {% block title %}{{ title }}{% endblock %}
 
 {% block body %}
-
-
-<p>{{ content|safe }}</p>
-
+  <p>{{ content|safe }}</p>
+  <a href="{% url "encyclopedia:edit" %}">Edit</a>
 
 {% endblock %}

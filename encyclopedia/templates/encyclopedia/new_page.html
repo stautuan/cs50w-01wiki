@@ -3,15 +3,15 @@
 {% block title %}Create New Page{% endblock %}
 
 {% block body %}
-<h1>Create New Page</h1>
-<form action="{% url 'encyclopedia:new' %}" method="POST">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <input type="submit">
-</form>
+  <h1>Create New Page</h1>
+  <form action="{% url 'encyclopedia:new' %}" method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Save">
+  </form>
 
-{% if error %}
-<p style='color: red'>{{ error }}</p>
-{% endif %}
+  {% if error %}
+  <p style='color: red'>{{ error }}</p>
+  {% endif %}
 
 {% endblock  %}

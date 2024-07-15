@@ -14,6 +14,11 @@ class NewPageForm(forms.Form):
         widget=forms.Textarea(attrs={'style': "vertical-align: top; display:flex; height: 300px; width: 500px"}))
 
 
+class EditPageForm(forms.Form):
+    content = forms.CharField(
+        widget=forms.Textarea(attrs={'style': "vertical-align: top; display:flex; height: 300px; width: 500px"}))
+
+
 def index(request):
     return render(request, "encyclopedia/index.html", {
         "entries": util.list_entries()
@@ -35,11 +40,11 @@ def convert_md_to_html(filename):
     return title, content
 
 
-def page(request, topic):
-    title, content = convert_md_to_html("entries/" + topic + ".md")
+def page(request, entry):
+    title, content = convert_md_to_html("entries/" + entry + ".md")
 
     return render(request, "encyclopedia/page.html", {
-        "page": util.get_entry(topic),
+        "page": util.get_entry(entry),
         "title": title,
         "content": content
     })
@@ -56,7 +61,7 @@ def search(request):
         lower_entries.append(entry.lower())
 
     if query in lower_entries:
-        return redirect("encyclopedia:page", topic=query)
+        return redirect("encyclopedia:page", entry=query)
 
     # Find entries containing the query as a substring
     matching_entries = []
@@ -80,7 +85,7 @@ def new(request):
             title = form.cleaned_data["title"]
             content = form.cleaned_data["content"]
 
-            # Check if entry already exists
+            # Check if entry with the provided title already exists
             if util.get_entry(title):
                 return render(request, "encyclopedia/new_page.html", {
                     "form": form,
@@ -89,7 +94,7 @@ def new(request):
 
             # Save the entry if it doesn't exist
             util.save_entry(title, content)
-            return redirect("encyclopedia:page", topic=title)
+            return redirect("encyclopedia:page", entry=title)
 
     # Handles when the user visits the page
     else:
@@ -97,4 +102,11 @@ def new(request):
 
     return render(request, "encyclopedia/new_page.html", {
         "form": form
+    })
+
+
+def edit(request):
+
+    return render(request, "encyclopedia/edit_page.html", {
+        "form": EditPageForm()
     })
