@@ -54,7 +54,7 @@ def search(request):
     query = request.GET.get('q').lower()
     entries = util.list_entries()
 
-    # Find the exact match of the query
+    # Find the exact entry match of the query
     lower_entries = []
 
     for entry in entries:
@@ -105,8 +105,21 @@ def new(request):
     })
 
 
-def edit(request):
+def edit(request, entry):
+    if request.method == "POST":
+        form = EditPageForm(request.POST)
+
+        if form.is_valid():
+            content = form.cleaned_data["content"]
+
+            util.save_entry(entry, content)
+            return redirect("encyclopedia:page", entry=entry)
+
+    else:
+        content = util.get_entry(entry)
+        form = EditPageForm(initial={"content": content})
 
     return render(request, "encyclopedia/edit_page.html", {
-        "form": EditPageForm()
+        "form": form,
+        "entry": entry
     })
