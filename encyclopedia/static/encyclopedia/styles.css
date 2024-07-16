@@ -2,9 +2,10 @@
   --blue: #1875d1;
   --blue-light: #3366cc;
   --blue-dark: #187fe5;
-  --grey: #94a3b8;
+  --grey: #64748b;
   --grey-lightest: #f1f5f9;
-  --grey-light: #64748b;
+  --grey-lighter: #cbd5e1;
+  --grey-light: #94a3b8;
   --grey-dark: #1e293b;
   --white: #fff;
   --black: #000;
@@ -32,15 +33,20 @@ h6 {
 
 h1 {
   margin-top: 0px;
+  margin-bottom: 30px;
   padding-top: 30px;
+  position: relative;
 }
 
-ul {
-  list-style-type: square;
-}
-
-li::marker {
-  color: var(--grey-light);
+h1::after {
+  content: '';
+  position: absolute;
+  top: 85px;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  height: 1px;
+  background-color: var(--grey-lighter);
 }
 
 a {
@@ -50,7 +56,7 @@ a {
 input,
 textarea {
   color: inherit;
-  border: 1px solid var(--grey);
+  border: 1px solid var(--grey-light);
   padding: 5px;
 }
 
@@ -68,6 +74,7 @@ input[type='submit']:hover {
 
 .main {
   padding: 10px 20px;
+  height: 100vh;
 }
 
 .search {
