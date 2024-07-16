@@ -1,5 +1,6 @@
 import re
 import markdown2
+import random
 
 from django.shortcuts import render, redirect
 from django import forms
@@ -123,3 +124,11 @@ def edit(request, entry):
         "form": form,
         "entry": entry
     })
+
+
+def random_page(request):
+    entries = util.list_entries()
+
+    if entries:
+        random_entry = random.choice(entries)
+        return redirect("encyclopedia:page", entry=random_entry)
