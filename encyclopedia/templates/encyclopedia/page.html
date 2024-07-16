@@ -4,6 +4,6 @@
 
 {% block body %}
   <p>{{ content|safe }}</p>
-  <a href="{% url "encyclopedia:edit" entry=title %}">Edit</a>
+  <p>[ <a href="{% url "encyclopedia:edit" entry=title %}" title='Edit this page'>edit</a> ]</p>
 
 {% endblock %}
