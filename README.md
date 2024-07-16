@@ -18,3 +18,7 @@ A project to create a Wikipedia-like online encyclopedia using Django and HTML t
 - Python
 - HTML template
 - Markdown2
+
+## Demo
+
+A recorded demo of the project, uploaded to [YouTube](https://youtu.be/uUq8FlU904g) as per CS50 requirements.
